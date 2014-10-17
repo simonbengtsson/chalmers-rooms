@@ -1,0 +1,38 @@
+<html ng-app="cgr">
+<head>
+    <meta charset="UTF-8">
+    <title>Chalmers Study Rooms</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="Book Chalmers group rooms">
+    <meta name="viewport" content="width=device-width">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/png" href="/assets/appicon.png">
+    <link rel="icon" sizes="196x196" href="/assets/appicon.png">
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,100,400,700,300italic' rel='stylesheet' type='text/css'>
+    <link href="main.css">
+</head>
+<body ng-controller="MainCtrl">
+
+<div ng-view></div>
+
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/pickadate/lib/picker.js"></script>
+<script src="bower_components/pickadate/lib/picker.date.js"></script>
+<script src="app.js"></script>
+<script src="js/timeedit-service.js"></script>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-34855982-8', 'chalmerskurser.se');
+    ga('send', 'pageview');
+</script>
+
+</body>
+</html>
