@@ -1,1 +1,27 @@
-<h1>Bookings</h1>
+<div ng-controller="BookingCtrl" id="user-section">
+
+    <div class="booking confirmed" ng-repeat="booking in bookings">
+        <h3>Ingen bokning</h3>
+
+        <h5 class="number">
+            {{ booking.room.name }}
+            <span class="time-picker">{{ booking.time }}</span>
+        </h5>
+
+        <p class="info">
+            {{ booking.info }}
+        </p>
+
+        <div class="btn-cont">
+            <span id="btn-dec" class="btn">-</span>
+            <span id="duration">du</span>
+            <span id="btn-inc" class="btn">+</span>
+
+            <div class="btn btn-unconfirmed-cancel">Cancel</div>
+            <div class="btn btn-confirm">Confirm</div>
+        </div>
+        <div class="btn btn-confirmed-cancel">Cancel</div>
+    </div>
+
+    <div class="logged-in-box">Inloggad som <em>{{ user }}</em> <a href="#/" ng-click="logout()">Logga ut</a></div>
+</div>

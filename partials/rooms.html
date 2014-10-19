@@ -1,1 +1,31 @@
-<h1>Rooms</h1>
+<div class="timebar-cont">
+    <div class="timebar">
+        <div class="btn-group-horizontal hours-cont" data-toggle="buttons">
+            <p></p>
+        </div>
+        <input class="btn btn-date-picker" id="inputdate" data-value="-" placeholder="">
+    </div>
+</div>
+
+<div class="datepicker"></div>
+
+<div class="building-header"></div>
+<div class="container" ng-controller="RoomCtrl">
+    <div class="building col-md-3" ng-repeat="(name, rooms) in buildings">
+
+        <h4>{{name}} ({{ rooms.length }})</h4>
+
+        <div class="room" ng-repeat="room in rooms" ng-click="book(room)">
+            <h5 class="number">{{ room.name }}
+                <span class="free-time"> {{room.vacantTime}}h{{ room.vacantTime === 4 ? '+' : '' }}</span>
+            </h5>
+
+            <p class="info">
+                {{ room.type }}
+                {{ room.equipment }}
+            </p>
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </div>
+
+    </div>
+</div>

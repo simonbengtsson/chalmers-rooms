@@ -1,0 +1,494 @@
+#rooms {
+
+  @sidebar_width: 250px;
+  @header_height: 50px;
+
+  h1, h2, h3, h4, h5, h6, p {
+    font-family: Roboto;
+  }
+
+  #smurf {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -200px;
+    margin-left: -200px;
+    width: 400px;
+    display: none;
+  }
+
+  .container {
+    padding: 0;
+  }
+
+  .alert {
+    border: none;
+    box-shadow: none;
+    background: #f8efc0;
+    font-size: 16px;
+  }
+
+  .beta {
+    background: #2c3e50;
+    color: #eee;
+    padding: 5px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+
+    a {
+      color: #5ae;
+      margin-left: 10px;
+    }
+  }
+
+  /* TOAST */
+  #toast {
+    display: none;
+    position: fixed;
+    bottom: 40px;
+    background: rgba(150, 150, 150, 0.9);
+    color: #fff;
+    border-radius: 20px;
+    font-size: 13px;
+    padding: 10px 25px;
+    width: 80%;
+    left: 10%;
+  }
+
+  @media (min-width: 768px) {
+    #toast {
+      font-size: 16px;
+    }
+  }
+
+  /* LOGIN MODAL */
+  #login-modal {
+
+    .modal-dialog {
+      margin: 0 auto
+    }
+
+    .modal-content {
+      padding: 40px;
+      padding-top: 30px;
+      max-width: 500px;
+      border-radius: 2px;
+      margin: 0 auto;
+      margin-top: 100px;
+
+      .alert {
+        margin-top: 20px;
+        display: none;
+      }
+
+      h4 {
+        font-size: 28px;
+        color: #666;
+        font-weight: 300;
+        margin-bottom: 15px;
+      }
+
+      label {
+        font-size: 22px;
+        font-weight: 300;
+      }
+
+      input {
+        border-radius: 0;
+        border: solid 2px @first;
+        outline: none;
+        box-shadow: none;
+        font-size: 18px;
+        height: auto;
+        padding: 10px 10px;
+      }
+
+      .btn {
+        background: @first;
+        color: #fff;
+        font-size: 20px;
+        height: 50px;
+        font-weight: 300;
+        width: 180px;
+        border-radius: 50px;
+      }
+    }
+  }
+
+  /* LOGGED IN BOX */
+  .logged-in-box {
+    color: #888;
+    text-align: center;
+    margin-top: 30px;
+    font-size: 18px;
+    margin-bottom: 30px;
+
+    a {
+      color: @first;
+    }
+  }
+
+  .btn {
+    border: solid 2px @first;
+    background: transparent;
+    outline: 0;
+    border-radius: 20px;
+    color: @first;
+    text-align: center;
+    cursor: pointer;
+    padding: 0 10px;
+    margin: 0;
+    line-height: 40px;
+    height: 40px;
+  }
+
+  .btn.active, .btn:active {
+    background: @first;
+    color: #fff;
+    box-shadow: none;
+  }
+
+  .btn:hover {
+    background: @first;
+    color: #fff;
+    transition: background-color 200ms linear, color 200ms linear;
+  }
+
+  .btn-secondary {
+    border-color: #aaa;
+    color: #aaa;
+  }
+
+  .btn-secondary:hover, .btn-secondary:hover, .btn-secondary:hover {
+    border-color: #aaa;
+    background: #aaa;
+    color: #fff;
+  }
+
+  .actionbar-cont {
+    background: @first;
+  }
+  .actionbar {
+    position: relative;
+    color: #fff;
+    height: @header_height;
+    white-space: nowrap;
+
+    a, h1 {
+      display: inline-block;
+      margin: 0;
+      padding: 0 10px;
+      font-size: 20px;
+      color: #fff;
+      text-decoration: none;
+      line-height: @header_height;
+
+      .glyphicon {
+        font-size: 18px;
+      }
+    }
+
+    a:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    nav {
+      position: absolute;
+      right: 0;
+      top: 0;
+      background: fade(@first, 50%);
+      height: 100%;
+      overflow: hidden;
+
+      .nav-btn {
+        position: relative;
+        top: -1px;
+        display: inline-block;
+        padding: 0px 15px;
+        line-height: @header_height;
+        margin: 0;
+        height: 100%;
+        color: #fff;
+        text-decoration: none;
+        z-index: 100;
+        font-size: 25px;
+        cursor: pointer;
+      }
+
+      .nav-btn:hover {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-btn.spin {
+        -webkit-animation-name: spin;
+        -webkit-animation-duration: 1200ms;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-timing-function: linear;
+        -moz-animation-name: spin;
+        -moz-animation-duration: 1200ms;
+        -moz-animation-iteration-count: infinite;
+        -moz-animation-timing-function: linear;
+
+        animation-name: spin;
+        animation-duration: 1200ms;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+
+        background: transparent;
+        cursor: default;
+      }
+
+      @-ms-keyframes spin {
+        from {
+          -ms-transform: rotate(0deg);
+        }
+        to {
+          -ms-transform: rotate(360deg);
+        }
+      }
+      @-moz-keyframes spin {
+        from {
+          -moz-transform: rotate(0deg);
+        }
+        to {
+          -moz-transform: rotate(360deg);
+        }
+      }
+      @-webkit-keyframes spin {
+        from {
+          -webkit-transform: rotate(0deg);
+        }
+        to {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    }
+  }
+
+  .timebar {
+    position: relative;
+    background: #fff;
+    padding: 10px 0 0;
+    font-size: 20px;
+    color: #888;
+    white-space: nowrap;
+
+    .btn-group-horizontal {
+      margin-right: 100px;
+      white-space: nowrap;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding-bottom: -10px;
+      height: 50px;
+
+      .btn {
+        border-radius: 5px;
+        display: inline-block;
+        height: 40px;
+        padding-right: 8px;
+        padding-left: 8px;
+        margin-left: 5px;
+        border: none;
+        line-height: 40px;
+        color: #777;
+      }
+
+      .btn:hover {
+        background: transparent;
+        color: @first;
+      }
+
+      .btn.active {
+        color: #fff;
+        background: @first;
+      }
+
+      .btn.active:hover {
+        color: #fff;
+        background: @first;
+        cursor: default;
+      }
+    }
+
+    .btn-date-picker {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      background: #fff;
+      width: 80px;
+    }
+
+    .btn-date-picker:hover {
+      background: @first;
+    }
+  }
+
+  article {
+    padding: 0;
+  }
+
+  .room {
+    padding: 7px 10px;
+    position: relative;
+    min-height: 80px;
+    cursor: pointer;
+
+    h5 {
+      font-size: 22px;
+      color: #777;
+      margin-bottom: 2px;
+    }
+
+    .info {
+      color: #777;
+      font-size: 16px;
+      padding-right: 20px;
+    }
+
+    .free-time {
+      color: @first;
+    }
+
+    .glyphicon {
+      color: #aaa;
+      top: 40%;
+      padding-right: 15px;
+      position: absolute;
+      right: 0;
+    }
+  }
+
+  .room:hover {
+    background: #f5f5f5;
+  }
+
+  #user-section {
+
+    .btn {
+      font-size: 16px;
+      line-height: 37px;
+    }
+
+    #bookings {
+      margin: 0 20px;
+    }
+
+    .booking {
+      position: relative;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 20px auto;
+      max-width: 500px;
+
+      h5, p {
+        color: #777;
+
+        span {
+          color: #aaa;
+        }
+      }
+
+      h5 {
+        font-size: 20px;
+      }
+
+      p {
+        font-size: 16px;
+        margin-right: 85px;
+      }
+
+      h3 {
+        color: #ccc;
+        margin: 0;
+        font-weight: 300;
+        display: none;
+      }
+
+      .btn-confirmed-cancel {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        display: none;
+      }
+
+      .btn-cont {
+        text-align: right;
+        display: none;
+
+        .duration {
+          font-size: 16px;
+          color: #888;
+          padding: 0 2px;
+        }
+
+        .btn {
+          text-align: right;
+        }
+
+        .btn-unconfirmed-cancel {
+          margin-left: 10px;
+          background: transparent;
+        }
+
+        .btn-inc, .btn-dec {
+          height: 40px;
+          width: 40px;
+          text-align: center;
+        }
+
+        .btn-unconfirmed-cancel, .btn-inc, .btn-dec {
+          border-color: #aaa;
+          color: #aaa;
+        }
+
+        .btn-unconfirmed-cancel:hover, .btn-inc:hover, .btn-dec:hover {
+          border-color: #aaa;
+          background: #aaa;
+          color: #fff;
+        }
+      }
+    }
+
+    .booking.empty {
+      border: dashed 5px #f5f5f5;
+
+      h3 {
+        display: block;
+      }
+
+      h5, p, .btn-cont, .btn-confirmed-cancel {
+        display: none;
+      }
+    }
+
+    .booking.confirmed {
+      background: #f5f5f5;
+
+      .btn-confirmed-cancel {
+        display: block;
+      }
+    }
+
+    .booking.unconfirmed {
+      background: #f5f5f5;
+
+      .btn-cont {
+        display: block;
+      }
+    }
+  }
+
+  #room-section {
+    display: block;
+  }
+
+}

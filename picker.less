@@ -1,0 +1,99 @@
+.picker__holder {
+  right: 0;
+  border-radius: 0;
+  top: 0px;
+  border: none;
+  box-shadow: 0 0 4px #bbb;
+
+  .picker__frame, .picker__wrap {
+    padding: 0;
+    margin: 0;
+  }
+
+  .picker__nav--next, .picker__nav--prev {
+    height: 30px;
+  }
+
+  .picker__nav--next:hover, .picker__nav--prev:hover {
+    background: transparent;
+    height: 30px;
+  }
+
+  .picker__nav--prev:before, .picker__nav--next:before {
+    border: none;
+    top: 5px;
+    position: absolute;
+  }
+
+  .picker__nav--disabled:hover {
+    background: transparent;
+  }
+
+  .picker__nav--disabled {
+    color: #ccc;
+  }
+
+  .picker__nav--next {
+    right: 0;
+  }
+
+  .picker__nav--prev {
+    left: 0;
+  }
+
+  .picker__day {
+    padding: 12px 0;
+  }
+
+  .picker__nav--prev:before {
+    left: 5px;
+    content: '\25C0'
+  }
+
+  .picker__nav--next:before {
+    right: 20px;
+    content: '\25B6'
+  }
+
+  .picker__day--selected {
+    background: @first !important;
+    color: #fff !important;
+    border: 1px solid @first !important;
+  }
+
+  .picker__day--highlighted {
+    background: #fff;
+    color: #555;
+    border: none;
+  }
+
+  .picker__day--disabled {
+    background: #f5f5f5;
+    border: 1px solid transparent;
+    color: #ddd;
+  }
+
+  .picker__day--infocus:hover, .picker__day--outfocus:hover {
+    background: #f5f5f5;
+  }
+
+  .picker__day--today {
+    color: #222;
+  }
+
+  .picker__day--today:hover {
+    border: 1px solid #f5f5f5;
+  }
+
+  .picker__day--today.picker__day--selected {
+    color: #fff;
+  }
+
+  .picker__day--today:before {
+    border-top-color: #888;
+  }
+
+  .picker__day--selected:before {
+    border-top-color: #fff;
+  }
+}

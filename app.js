@@ -4,14 +4,10 @@ app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
         .when('/bookings', {
             templateUrl: 'partials/bookings.html',
-            controller: 'MainCtrl'
+            controller: 'BookingCtrl'
         })
         .when('/', {
             templateUrl: 'partials/rooms.html',
-            controller: 'MainCtrl'
+            controller: 'RoomCtrl'
         });
-}]);
-
-app.controller('MainCtrl', ['$scope', function ($scope) {
-    $scope.hey = 'hey!';
 }]);

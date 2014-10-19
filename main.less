@@ -1,8 +1,74 @@
+@first: #1abc9c;
+@firstHover: #16a286;
+
 @import 'bower_components/bootstrap/less/bootstrap';
 @import 'bower_components/flat-ui/less/flat-ui';
 @import "bower_components/pickadate/lib/compressed/themes/classic.css";
 @import "bower_components/pickadate/lib/compressed/themes/classic.date.css";
+@import "picker";
+@import "old";
 
-a {
-  color: darkred;
+@local-font-path: 'bower_components/flat-ui/fonts/lato/';
+@icon-font-path: 'bower_components/flat-ui/fonts/glyphicons/';
+
+.navbar {
+  border-radius: 0;
+  margin-bottom: 0;
+  position: relative;
+  background: @first;
+
+  .navbar-brand:hover {
+    color: #fff;
+  }
+
+  .navbar-nav .active a:hover, .navbar-nav .active a {
+    background: @firstHover;
+  }
+
+  .navbar-nav li a:hover {
+    color: #eee;
+  }
+}
+
+.status {
+  background: #2c3e50;
+  color: #fff;
+  padding: 5px 20px;
+}
+
+.navbar-right {
+  position: absolute;
+  right: 10px;
+  top: 0;
+
+  li {
+    float: left;
+    a {
+      padding: 15px 21px
+    }
+  }
+}
+
+h4 {
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.building-header {
+  background: #eee;
+  border-bottom: solid 2px #ddd;
+  height: 40px;
+  margin-bottom: -40px;
+}
+.building {
+  padding: 0;
+
+  h4 {
+    line-height: 34px;
+    padding: 4px 10px 0;
+    background: #eee;
+    color: #777;
+    margin: 0;
+    border-bottom: solid 2px #ddd;
+  }
 }
