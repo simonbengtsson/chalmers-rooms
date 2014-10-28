@@ -4,6 +4,7 @@ app.service('teRooms', ['$http', '$q', 'ModelService', function ($http, $q, mode
 
     var MAX_BOOKING_COUNT = 4;
     var BASE_URL = 'https://se.timeedit.net/web/chalmers/db1/b1';
+    var AJAX_BRIDGE_URL = "https://ajax-bridge.appspot.com";
 
     var self = this;
     var devToken = null;
@@ -34,7 +35,7 @@ app.service('teRooms', ['$http', '$q', 'ModelService', function ($http, $q, mode
 
         var deferred = $q.defer();
 
-        $http.post('http://localhost:8082', data).then(function (res) {
+        $http.post(AJAX_BRIDGE_URL, data).then(function (res) {
             res = res.data;
 
             // Stored token OK

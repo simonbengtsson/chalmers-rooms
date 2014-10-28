@@ -3,6 +3,7 @@ var app = angular.module('cgr');
 app.service('teBookings', ['$http', '$q', 'ModelService', function ($http, $q, model) {
 
     var MAX_BOOKING_COUNT = 4;
+    var AJAX_BRIDGE_URL = "https://ajax-bridge.appspot.com";
 
     var self = this;
     var roomsUpdated = localStorage.getItem('roomsUpdated');
@@ -42,7 +43,7 @@ app.service('teBookings', ['$http', '$q', 'ModelService', function ($http, $q, m
 
         var deferred = $q.defer();
 
-        $http.post('http://localhost:8082', data).then(function (res) {
+        $http.post(AJAX_BRIDGE_URL, data).then(function (res) {
             res = res.data;
 
             // Stored token OK

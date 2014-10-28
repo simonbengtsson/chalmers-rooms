@@ -1,6 +1,6 @@
 <?php
 
-const AJAX_BRIDGE = 'http://localhost:8082';
+const AJAX_BRIDGE = 'https://ajax-bridge.appspot.com';
 
 require_once('environment.php'); // Load default username and password
 
