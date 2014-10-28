@@ -60,7 +60,7 @@ app.service('teBookings', ['$http', '$q', 'ModelService', function ($http, $q, m
                     }, function (res) {
                         deferred.reject(res);
                     });
-                }, function(res) {
+                }, function (res) {
                     deferred.reject(res);
                 });
             } else {
@@ -92,8 +92,17 @@ app.service('teBookings', ['$http', '$q', 'ModelService', function ($http, $q, m
         return ajax('https://se.timeedit.net/web/chalmers/db1/b1');
     };
 
-    this.createBooking = function (date, hour) {
-
+    this.createBooking = function (room) {
+        var d = $q.defer();
+        var headers = {'Content-Type': 'application/x-www-form-urlencoded'};
+        var content = 'o=' + room.id  + '.186&o=203460.192&dates=' + room.date + '&starttime=' + room.startHour + '%3A00&endtime=' + room.endHour + '%3A00&url=none';
+        console.log(content);
+        ajax('https://se.timeedit.net/web/chalmers/db1/b1/ri1Q5008.html', 'POST', headers, content).then(function (res) {
+            d.resolve(res);
+        }, function (res) {
+            d.reject(res);
+        });
+        return d.promise;
     };
 
     /**

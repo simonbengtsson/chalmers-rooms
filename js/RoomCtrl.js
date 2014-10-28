@@ -37,6 +37,9 @@ app.controller('RoomCtrl', ['$scope', '$location', 'UtilsService', '$q', 'ModelS
      * @param room
      */
     $scope.book = function (room) {
+        room.startHour = pickedHour;
+        room.endHour = pickedHour + room.vacantTime;
+        room.date = picker.get('select', 'yyyymmdd');
         model.chosenRoom = room;
         $location.path('/bookings');
     };

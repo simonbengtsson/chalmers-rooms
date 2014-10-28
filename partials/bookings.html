@@ -3,7 +3,6 @@
     <div class="booking" ng-class="bookingsLength() < n ? 'empty' : 'confirmed'" ng-repeat="n in [1,2,3,4]">
         <h3 ng-show="bookingsLength() < (n - 1) || (bookingsLength() < n && !model.chosenRoom)">Ingen bokning</h3>
 
-
         <div ng-hide="bookingsLength() < n">
             <h5 class="number">
                 {{ booking(n - 1).room }}
@@ -21,22 +20,18 @@
         </div>
 
         <div ng-show="bookingsLength() === (n - 1) && model.chosenRoom">
-            <h3>{{ model.chosenRoom.name }} test</h3>
-
             <h5 class="number">
-                {{ model.chosenRoom.room }}
-                <span class="time-picker">{{ model.chosenRoom.date }} {{ model.chosenRoom.time }}</span>
+                {{ model.chosenRoom.name }}
+                <span class="time-picker">{{ roomDateTime() }}</span>
             </h5>
 
             <p class="info">
-                {{ model.chosenRoom.info }}
+                {{ roomInfo(model.chosenRoom) }}
             </p>
 
             <div class="btn-cont">
-                <span id="duration">{{ model.chosenRoom.time }}</span>
-
                 <div class="btn btn-unconfirmed-cancel">Cancel</div>
-                <div class="btn btn-confirm">Confirm</div>
+                <div class="btn btn-confirm" ng-click="createBooking(model.chosenRoom)">Confirm</div>
             </div>
         </div>
     </div>

@@ -9,21 +9,34 @@ app.controller('BookingCtrl', ['$scope', '$location', 'ModelService', '$timeout'
     });
 
     $scope.cancelBooking = function (id) {
-        console.log(id);
         teBookings.cancelBooking(id).then(function (res) {
             delete $scope.bookings[id];
-        }, function (res) {
-            console.error(res)
         });
     };
 
-    $scope.createBooking = function () {
-        console.log(model.chosenRoom);
-        teBookings.cancelBooking(id).then(function (res) {
-            delete $scope.bookings[id];
-        }, function (res) {
-            console.error(res)
+    $scope.createBooking = function (room) {
+        teBookings.createBooking(room).then(function (res) {
+            if(res.status === 303) {
+                model.chosenRoom = null;
+                teBookings.fetchBookings().then(function (bookings) {
+                    $scope.bookings = bookings;
+                });
+            }
         });
+    };
+
+    $scope.roomInfo = function(room) {
+        if(!room) return '';
+        var arr = [room.building, room.equipment, room.type];
+        for(var i = 0; i < arr.length; i++) {
+            if(!arr[i]) arr.splice(i, 1);
+        }
+        return arr.join(", ");
+    };
+
+    $scope.roomDateTime = function() {
+        if(!model.chosenRoom) return '';
+        return model.chosenRoom.date + model.chosenRoom.startHour + ':00 - ' + model.chosenRoom.endHour + ':00';
     };
 
     $scope.bookingsLength = function () {

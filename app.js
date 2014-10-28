@@ -6,10 +6,8 @@ app.config(['$routeProvider', function ($routeProvider) {
         var deferred = $q.defer();
 
         teBookings.isLoggedIn().then(function() {
-            console.log('log');
             deferred.resolve();
         }, function() {
-            console.log('log');
             deferred.reject();
             $location.path('/login');
         });
