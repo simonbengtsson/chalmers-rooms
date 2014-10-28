@@ -22,10 +22,9 @@
   }
 
   .alert {
-    border: none;
-    box-shadow: none;
     background: #f8efc0;
     font-size: 16px;
+    color: #999;
   }
 
   .beta {
@@ -62,61 +61,6 @@
     }
   }
 
-  /* LOGIN MODAL */
-  #login-modal {
-
-    .modal-dialog {
-      margin: 0 auto
-    }
-
-    .modal-content {
-      padding: 40px;
-      padding-top: 30px;
-      max-width: 500px;
-      border-radius: 2px;
-      margin: 0 auto;
-      margin-top: 100px;
-
-      .alert {
-        margin-top: 20px;
-        display: none;
-      }
-
-      h4 {
-        font-size: 28px;
-        color: #666;
-        font-weight: 300;
-        margin-bottom: 15px;
-      }
-
-      label {
-        font-size: 22px;
-        font-weight: 300;
-      }
-
-      input {
-        border-radius: 0;
-        border: solid 2px @first;
-        outline: none;
-        box-shadow: none;
-        font-size: 18px;
-        height: auto;
-        padding: 10px 10px;
-      }
-
-      .btn {
-        background: @first;
-        color: #fff;
-        font-size: 20px;
-        height: 50px;
-        font-weight: 300;
-        width: 180px;
-        border-radius: 50px;
-      }
-    }
-  }
-
-  /* LOGGED IN BOX */
   .logged-in-box {
     color: #888;
     text-align: center;
@@ -330,10 +274,126 @@
     .btn-date-picker:hover {
       background: @first;
     }
+
+    .picker {
+      right: 0;
+    }
+
+    .picker__holder {
+      right: 0;
+      border-radius: 0;
+      top: 0px;
+      border: none;
+      box-shadow: 0 0 4px #bbb;
+
+      .picker__frame, .picker__wrap {
+        padding: 0;
+        margin: 0;
+      }
+
+      .picker__nav--next, .picker__nav--prev {
+        height: 30px;
+      }
+
+      .picker__nav--next:hover, .picker__nav--prev:hover {
+        background: transparent;
+        height: 30px;
+      }
+
+      .picker__nav--prev:before, .picker__nav--next:before {
+        border: none;
+        top: 5px;
+        position: absolute;
+      }
+
+      .picker__nav--disabled:hover {
+        background: transparent;
+      }
+
+      .picker__nav--disabled {
+        color: #ccc;
+      }
+
+      .picker__nav--next {
+        right: 0;
+      }
+
+      .picker__nav--prev {
+        left: 0;
+      }
+
+      .picker__day {
+        padding: 12px 0;
+      }
+
+      .picker__nav--prev:before {
+        left: 5px;
+        content: '\25C0'
+      }
+
+      .picker__nav--next:before {
+        right: 20px;
+        content: '\25B6'
+      }
+
+      .picker__day--selected {
+        background: @first !important;
+        color: #fff !important;
+        border: 1px solid @first !important;
+      }
+
+      .picker__day--highlighted {
+        background: #fff;
+        color: #555;
+        border: none;
+      }
+
+      .picker__day--disabled {
+        background: #f5f5f5;
+        border: 1px solid transparent;
+        color: #ddd;
+      }
+
+      .picker__day--infocus:hover, .picker__day--outfocus:hover {
+        background: #f5f5f5;
+      }
+
+      .picker__day--today {
+        color: #222;
+      }
+
+      .picker__day--today:hover {
+        border: 1px solid #f5f5f5;
+      }
+
+      .picker__day--today.picker__day--selected {
+        color: #fff;
+      }
+
+      .picker__day--today:before {
+        border-top-color: #888;
+      }
+
+      .picker__day--selected:before {
+        border-top-color: #fff;
+      }
+    }
+
   }
 
   article {
     padding: 0;
+  }
+
+  .building {
+    padding: 0;
+
+    h4 {
+      background: #eee;
+      color: #777;
+      margin: 0;
+      border-bottom: solid 2px #ddd;
+    }
   }
 
   .room {
@@ -410,19 +470,16 @@
         color: #ccc;
         margin: 0;
         font-weight: 300;
-        display: none;
       }
 
       .btn-confirmed-cancel {
         position: absolute;
         bottom: 10px;
         right: 10px;
-        display: none;
       }
 
       .btn-cont {
         text-align: right;
-        display: none;
 
         .duration {
           font-size: 16px;
@@ -460,14 +517,6 @@
 
     .booking.empty {
       border: dashed 5px #f5f5f5;
-
-      h3 {
-        display: block;
-      }
-
-      h5, p, .btn-cont, .btn-confirmed-cancel {
-        display: none;
-      }
     }
 
     .booking.confirmed {

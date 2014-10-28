@@ -1,44 +1,36 @@
 var app = angular.module('cgr');
 
-app.controller('BookingCtrl', ['$scope', '$location', 'timeedit', 'ModelService', function ($scope, $location, timeedit, model) {
+app.controller('BookingCtrl', ['$scope', '$location', 'ModelService', '$timeout', 'teRooms', 'teBookings', function ($scope, $location, model, $timeout, teRooms, teBookings) {
 
-    $scope.bookings = [
-        {
-            room: {
-                name: 'Test'
-            },
-            info: "info",
-            time: 'time'
-        }
-    ];
+    $scope.bookings = {};
 
-    /**
-     * After update, add event handlers to the dom again.
-     */
-    function addEventHandlersBookings() {
-        $('.btn-confirmed-cancel').click(cancelBooking);
-        $('.btn-confirm').click(createBooking);
-        $('#login-form').submit(login);
+    teBookings.fetchBookings().then(function (bookings) {
+        $scope.bookings = bookings;
+    });
 
-        $('.btn-unconfirmed-cancel').click(function () {
-            $(this).parent().parent().removeClass('unconfirmed');
-            $(this).parent().parent().addClass('empty');
+    $scope.cancelBooking = function (id) {
+        console.log(id);
+        teBookings.cancelBooking(id).then(function (res) {
+            delete $scope.bookings[id];
+        }, function (res) {
+            console.error(res)
         });
+    };
 
-        $('.btn-inc').click(function () {
-            var $dur = $(this).siblings('.duration');
-            var val = parseInt($dur.text());
-            if (val < MAX_BOOKING_COUNT) {
-                $dur.text((val + 1) + 'h');
-            }
+    $scope.createBooking = function () {
+        console.log(model.chosenRoom);
+        teBookings.cancelBooking(id).then(function (res) {
+            delete $scope.bookings[id];
+        }, function (res) {
+            console.error(res)
         });
+    };
 
-        $('.btn-dec').click(function () {
-            var $dur = $(this).siblings('.duration');
-            var val = parseInt($dur.text());
-            if (val > 1) {
-                $dur.text((val - 1) + 'h');
-            }
-        });
-    }
+    $scope.bookingsLength = function () {
+        return Object.keys($scope.bookings).length;
+    };
+
+    $scope.booking = function (index) {
+        return $scope.bookings[Object.keys($scope.bookings)[index]];
+    };
 }]);

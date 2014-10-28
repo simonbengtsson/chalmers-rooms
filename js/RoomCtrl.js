@@ -1,8 +1,8 @@
 var app = angular.module('cgr');
 
-app.controller('RoomCtrl', ['$scope', '$location', 'timeedit', 'UtilsService', '$q', 'ModelService', function ($scope, $location, timeedit, utils, $q, model) {
+app.controller('RoomCtrl', ['$scope', '$location', 'UtilsService', '$q', 'ModelService', 'teRooms', 'teBookings', function ($scope, $location, utils, $q, model, teRooms, teBookings) {
 
-    $scope.buildings = [];
+    $scope.buildings = {};
 
     // Chalmers rules
     var MAX_BOOKING_COUNT = 4;
@@ -36,7 +36,7 @@ app.controller('RoomCtrl', ['$scope', '$location', 'timeedit', 'UtilsService', '
      * Go to booking page
      * @param room
      */
-    $scope.book = function(room) {
+    $scope.book = function (room) {
         model.chosenRoom = room;
         $location.path('/bookings');
     };
@@ -44,45 +44,24 @@ app.controller('RoomCtrl', ['$scope', '$location', 'timeedit', 'UtilsService', '
     /**
      * Fetch available rooms and bookings from TimeEdit
      */
-    var updateRooms = function() {
+    var updateRooms = function () {
         updateHours();
         var hour = parseInt($('.timebar').find('.time-btn.active').text());
         var date = picker.get('select', 'yyyymmdd');
-        var promises = [];
-        var h = 1;
-        for (var i = 1; i <= 4; i++) {
-            promises.push(timeedit.fetchAvailableRooms(hour, date, i).then(function(res) {
-                $scope.test.status = 'Downloading vacant rooms for ' + h  + ' hours';
-                h++;
-                return res;
-            }));
-        }
-        model.getAllRooms().then(function(allRooms) {
-            var rooms = {};
-            $q.all(promises).then(function (res) {
 
-                res.forEach(function (ids, index) {
-                    ids.forEach(function (id) {
-                        if(allRooms[id]) {
-                            rooms[id] = allRooms[id];
-                            rooms[id].vacantTime = index + 1;
-                        }
-                    });
-                });
-
-                $scope.buildings = model.groupInBuildings(rooms);
+        teRooms.getAllRooms().then(function (allRooms) {
+            teRooms.getAvailableRooms(allRooms, date, hour).then(function(buildings) {
+                $scope.buildings = buildings;
             });
-        }, function() {
-
-        }, function() {
-            console.log('progress')
+        }, function (res) {
+            console.error('error', res);
         });
     };
 
     /**
      * Update the time bar with the right set of hours
      */
-    var updateHours = function() {
+    var updateHours = function () {
         var html = '';
 
         var currentHour = new Date().getHours();
@@ -151,7 +130,6 @@ app.controller('RoomCtrl', ['$scope', '$location', 'timeedit', 'UtilsService', '
         }
     };
 
-    updateHours();
     updateRooms();
 
 }]);

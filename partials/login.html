@@ -1,0 +1,17 @@
+<div class="login-page">
+
+    <div class="alert alert-warning" ng-show="loginError">{{ loginError }}</div>
+
+    <h4>Inloggning</h4>
+
+    <form id="login-form" class="clearfix" ng-submit="login()">
+        <div class="form-group">
+            <input type="text" class="form-control" ng-model="user" placeholder="Chalmers ID (CID)" />
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" ng-model="password" placeholder="Lösenord" />
+        </div>
+        <button type="submit" class="btn pull-right">Logga in</button>
+    </form>
+
+</div>

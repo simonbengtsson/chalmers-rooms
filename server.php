@@ -1,9 +1,14 @@
 <?php
 
+const AJAX_BRIDGE = 'http://localhost:8082';
+
 require_once('environment.php'); // Load default username and password
 
 function getToken()
 {
+    $user = isset($_GET['user']) ? $_GET['user'] : $_ENV['defaultUser'];
+    $pass = isset($_GET['password']) ? $_GET['password'] : $_ENV['defaultPassword'];
+
     $context = stream_context_create(['http' => [
         'follow_location' => 0,
         'method' => 'POST',
@@ -12,12 +17,17 @@ function getToken()
             'url' => 'https://se.timeedit.net/web/chalmers/db1/b1',
             'method' => 'POST',
             'headers' => ['Content-Type' => "application/x-www-form-urlencoded", 'User-Agent' => 'chalmers.io'],
-            'content' => "authServer=student&username=$_ENV[defaultUser]&password=$_ENV[defaultPassword]"
+            'content' => "authServer=student&username=$user&password=$pass"
         ])
     ]]);
-    $res = file_get_contents('http://localhost:8080', false, $context);
-    $token = explode(';', json_decode($res, true)['headers']['Set-Cookie'])[0];
-    return $token;
+    $res = file_get_contents(AJAX_BRIDGE, false, $context);
+    $headers = json_decode($res, true)['headers'];
+    if(isset($headers['Set-Cookie'])) {
+        $token = explode(';', json_decode($res, true)['headers']['Set-Cookie'])[0];
+        return $token;
+    } else {
+        return false;
+    }
 }
 
 function updateRooms()
@@ -39,6 +49,10 @@ switch (isset($_GET['action']) ? $_GET['action'] : 'none') {
         break;
     case 'login':
         $res = getToken();
+        if(!$res) {
+            http_response_code(401);
+            $res = "Couldn't login";
+        }
         break;
     case 'data':
         $data = file_exists('data.json') ? json_decode(file_get_contents('data.json'), true) : [];
