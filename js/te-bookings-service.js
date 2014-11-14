@@ -79,7 +79,6 @@ app.service('teBookings', ['$http', '$q', 'ModelService', function ($http, $q, m
         var deferred = $q.defer();
 
         $http.get('/server.php?action=login&user=' + user + '&password=' + pass).then(function (res) {
-            console.log(res);
             model.userToken = res.data;
             deferred.resolve('Success');
         }, function (res, error) {
@@ -97,7 +96,6 @@ app.service('teBookings', ['$http', '$q', 'ModelService', function ($http, $q, m
         var d = $q.defer();
         var headers = {'Content-Type': 'application/x-www-form-urlencoded'};
         var content = 'o=' + room.id  + '.186&o=203460.192&dates=' + room.date + '&starttime=' + room.startHour + '%3A00&endtime=' + room.endHour + '%3A00&url=none';
-        console.log(content);
         ajax('https://se.timeedit.net/web/chalmers/db1/b1/ri1Q5008.html', 'POST', headers, content).then(function (res) {
             d.resolve(res);
         }, function (res) {

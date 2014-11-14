@@ -53,7 +53,7 @@ app.service('teRooms', ['$http', '$q', 'ModelService', function ($http, $q, mode
                         deferred.reject(res);
                     });
                 }, function (res) {
-                    console.log(res);
+                    console.error(res);
                 });
             } else {
                 deferred.reject(res);
