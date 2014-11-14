@@ -41,9 +41,11 @@ app.service('teBookings', ['$http', '$q', 'ModelService', function ($http, $q, m
             content: content
         };
 
+        data = $.param(data);
+
         var deferred = $q.defer();
 
-        $http.post(AJAX_BRIDGE_URL, data).then(function (res) {
+        $http.post(AJAX_BRIDGE_URL, data,  {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(function (res) {
             res = res.data;
 
             // Stored token OK

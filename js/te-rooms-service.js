@@ -7,7 +7,6 @@ app.service('teRooms', ['$http', '$q', 'ModelService', function ($http, $q, mode
     var AJAX_BRIDGE_URL = "https://ajax-bridge.appspot.com";
 
     var self = this;
-    var devToken = null;
     var roomsUpdated = localStorage.getItem('roomsUpdated');
     var allRooms = localStorage.getItem('allRooms') ? JSON.parse(localStorage.getItem('rooms')) : '';
 
@@ -28,14 +27,16 @@ app.service('teRooms', ['$http', '$q', 'ModelService', function ($http, $q, mode
             method: method,
             headers: {
                 'User-Agent': 'chalmers.io',
-                'Cookie': devToken
+                'Cookie': localStorage.getItem('devToken')
             },
             content: ''
         };
 
+        data = $.param(data);
+
         var deferred = $q.defer();
 
-        $http.post(AJAX_BRIDGE_URL, data).then(function (res) {
+        $http.post(AJAX_BRIDGE_URL, data, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(function (res) {
             res = res.data;
 
             // Stored token OK
@@ -70,7 +71,7 @@ app.service('teRooms', ['$http', '$q', 'ModelService', function ($http, $q, mode
         var deferred = $q.defer();
 
         $http.get('/server.php?action=login').then(function (res) {
-            devToken = res.data;
+            localStorage.setItem('devToken', res.data);
             deferred.resolve('Success');
         }, function (res, error) {
             deferred.reject("Couldn't login to timeedit, error: " + error);
