@@ -11,73 +11,36 @@ app.service('teRooms', ['$http', '$q', 'ModelService', function ($http, $q, mode
     var allRooms = localStorage.getItem('allRooms') ? JSON.parse(localStorage.getItem('rooms')) : '';
 
     /**
-     * Send ajax request to TimeEdit via AjaxBridge
+     * Get complete info for all rooms
      *
-     * @param url The url to connect to
-     * @param [method=GET] The http method
-     * @param [refreshTokenOnFailure=false]
      * @returns promise
      */
-    var ajax = function (url, method, refreshTokenOnFailure) {
-        method = method || 'GET';
-        refreshTokenOnFailure = refreshTokenOnFailure !== false;
+    this.getAllRooms = function () {
+        return $q(function (resolve, reject) {
 
-        var data = {
-            url: url,
-            method: method,
-            headers: {
-                'User-Agent': 'chalmers.io',
-                'Cookie': localStorage.getItem('devToken')
-            },
-            content: ''
-        };
+            var rooms = JSON.parse(localStorage.getItem('allRooms'));
+            var time = parseInt(localStorage.getItem('roomsUpdated'));
 
-        data = $.param(data);
-
-        var deferred = $q.defer();
-
-        $http.post(AJAX_BRIDGE_URL, data, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}}).then(function (res) {
-            res = res.data;
-
-            // Stored token OK
-            if (res.status >= 200 && res.status < 400) {
-                deferred.resolve(res);
-            }
-
-            // Try refresh of token
-            else if (res.status === 412 && refreshTokenOnFailure) {
-                refreshDevToken().then(function () {
-                    // Try same request again
-                    ajax(url, method, false).then(function (res) {
-                        deferred.resolve(res);
-                    }, function (res) {
-                        deferred.reject(res);
-                    });
-                }, function (res) {
-                    console.error(res);
+            if (!rooms || !time || !areRoomsFresh(time)) {
+                console.log('Fetching all rooms')
+                $http.get('/server.php?action=fetchRooms').then(function (res) {
+                    localStorage.setItem('allRooms', JSON.stringify(res.data));
+                    localStorage.setItem('roomsUpdated', new Date().getTime());
+                    resolve(res.data);
+                }).catch(function (err) {
+                    reject(err);
                 });
             } else {
-                deferred.reject(res);
+                resolve(rooms);
             }
 
-        }, function (res, error) {
-            deferred.reject("Couldn't connect to AjaxBridge, error: " + error);
         });
-
-        return deferred.promise;
     };
 
-    var refreshDevToken = function () {
-        var deferred = $q.defer();
-
-        $http.get('/server.php?action=login').then(function (res) {
-            localStorage.setItem('devToken', res.data);
-            deferred.resolve('Success');
-        }, function (res, error) {
-            deferred.reject("Couldn't login to timeedit, error: " + error);
-        });
-
-        return deferred.promise;
+    var areRoomsFresh = function (time) {
+        var oneWeek = 1000 * 3600 * 24 * 7;
+        var diff = time - (new Date()).getTime();
+        return diff < oneWeek;
     };
 
     this.getAvailableRooms = function (allRooms, date, hour) {
@@ -88,6 +51,7 @@ app.service('teRooms', ['$http', '$q', 'ModelService', function ($http, $q, mode
             promises.push(fetchAvailableRooms(date, hour, i));
         }
 
+        console.log('Fetching available')
         $q.all(promises).then(function (res) {
             var rooms = {};
 
@@ -100,9 +64,24 @@ app.service('teRooms', ['$http', '$q', 'ModelService', function ($http, $q, mode
                 });
             });
 
-            deferred.resolve(model.groupInBuildings(rooms));
+            let grouped = model.groupInBuildings(rooms)
+            deferred.resolve(grouped);
         }, function (res) {
             deferred.reject(res);
+        });
+
+        return deferred.promise;
+    };
+
+    var refreshDevToken = function () {
+        var deferred = $q.defer();
+
+        $http.get('/server.php?action=login').then(function (res) {
+            console.log("Logged in: " + res.data);
+            localStorage.setItem('devToken', res.data);
+            deferred.resolve('Success');
+        }, function (res, error) {
+            deferred.reject("Couldn't login to timeedit, error: " + error);
         });
 
         return deferred.promise;
@@ -121,11 +100,13 @@ app.service('teRooms', ['$http', '$q', 'ModelService', function ($http, $q, mode
 
         var url = 'https://se.timeedit.net/web/chalmers/db1/b1/objects.json?part=t&step=1&types=186&dates=';
         url += date + '-' + date + '&starttime=' + hour + ':0&endtime=' + (hour + duration) + ':0';
+        let encodedUrl = encodeURIComponent(url)
 
-        ajax(url).then(function (res) {
-            deferred.resolve(parseJsonRooms(res.content));
-        }, function (res) {
-            deferred.reject(res);
+        $http.get('/server.php?action=fetchAvailable&url=' + encodedUrl).then(function (res) {
+            deferred.resolve(parseJsonRooms(res.data))
+        }).catch(function(err) {
+            console.log(err)
+            deferred.reject(err)
         });
 
         return deferred.promise;
@@ -140,89 +121,6 @@ app.service('teRooms', ['$http', '$q', 'ModelService', function ($http, $q, mode
             });
         }
         return roomIds;
-    };
-
-    /**
-     * Get complete info for all rooms
-     *
-     * @returns promise
-     */
-    this.getAllRooms = function () {
-        return $q(function (resolve, reject) {
-
-            var rooms = JSON.parse(localStorage.getItem('allRooms'));
-            var time = parseInt(localStorage.getItem('roomsUpdated'));
-
-            if (!(rooms && time && isRoomsFresh(time))) {
-                fetchAllRooms().then(function (res) {
-                    localStorage.setItem('allRooms', JSON.stringify(res));
-                    localStorage.setItem('roomsUpdated', (new Date()).getTime());
-                    resolve(res);
-                }, function (res) {
-                    reject(res);
-                });
-            } else {
-                resolve(rooms);
-            }
-
-        });
-    };
-
-    /**
-     * Fetch all rooms
-     *
-     * @returns promise
-     */
-    var fetchAllRooms = function () {
-        var deferred = $q.defer();
-
-        var allRoomsUrl = 'https://se.timeedit.net/web/chalmers/db1/b1/objects.html?fr=t&partajax=t&im=f&add=f&sid=1002&l=sv_SE&step=1&grp=5&types=186';
-        ajax(allRoomsUrl).then(function (res) {
-
-            res = res.content;
-
-            var ids = parseRooms(res);
-            var promises = [];
-            for (var i = 0; i < ids.length; i++) {
-                var url = 'https://se.timeedit.net/web/chalmers/db1/b1/objects/' + ids[i] + '/o.json?fr=t&sid=1002';
-                promises.push(ajax(url));
-            }
-            $q.all(promises).then(function (res) {
-                var rooms = {};
-                res.forEach(function (json, index) {
-                    json = json.content;
-                    var info = JSON.parse(json);
-                    rooms[ids[index]] = {
-                        id: ids[index],
-                        name: info['ID'],
-                        building: info['Byggnad'],
-                        equipment: info['Utrustning'],
-                        type: info['Lokaltyp']
-                    };
-                });
-                deferred.resolve(rooms);
-            }, function (res) {
-                deferred.reject(res);
-            })
-        }, function (res) {
-            deferred.reject(res);
-        });
-
-        return deferred.promise;
-    };
-
-    var parseRooms = function (html) {
-        var roomIds = [];
-        $('<div>' + html + '</div>').find('.searchObject').each(function (i, elem) {
-            roomIds.push(elem.getAttribute('data-idonly'))
-        });
-        return roomIds;
-    };
-
-    var isRoomsFresh = function (time) {
-        var oneWeek = 1000 * 3600 * 24 * 7;
-        var diff = time - (new Date()).getTime();
-        return diff < oneWeek;
     };
 
 }]);

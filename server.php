@@ -159,7 +159,7 @@ function getToken()
     }
 
     $headers = [
-        "User-Agent: Third Party"
+        "User-Agent: chalmers.io"
     ];
 
     $postData = http_build_query($params);
@@ -183,21 +183,71 @@ function getToken()
 
     $cookies = getResponseHeaderString("Set-Cookie", $header);
 
-    // Should lookg something like TEwebchalmersdb1=a11b84d3f54c7e95f6e1c323808567812346099616170178109
+    // Should lookg something like TEwebchalmersdb1=410d9060f7d94441162e203b51f38f78-3058869567526894578
     $token = $cookie = explode(";", $cookies[0])[0];
 
     $roomUrl = 'https://se.timeedit.net/web/chalmers/db1/b1/objects.json?part=t&step=1&types=186&dates=';
     $context = stream_context_create([
         'http' => [
-            'header' => ["Cookie: TEwebchalmersdb1=aec5cd8650ed0e746fb42f26548cc3ee-1254734289413204370", "User-Agent: Aja"],
+            'header' => ["Cookie: $token", "User-Agent: chalmers.io"],
             'method'  => 'GET'
         ]
     ]);
     $result = file_get_contents($roomUrl, false, $context);
 
-    dump($http_response_header);
-    dd($result);
     return $token;
+}
+
+function fetchAllRooms()
+{
+    $token = getToken();
+    $roomUrl = 'https://se.timeedit.net/web/chalmers/db1/b1/objects.json?max=50&fr=f&part=t&partajax=t&im=f&step=1&sid=1004&l=sv_SE&types=186&subtypes=186&uo=t&ff=t';
+    $context = stream_context_create([
+        'http' => [
+            'header' => ["Cookie: $token", "User-Agent: chalmers.io"],
+            'method'  => 'GET'
+        ]
+    ]);
+    $result = file_get_contents($roomUrl, false, $context);
+
+    $objectRooms = json_decode($result)->objects;
+
+    $rooms = [];
+    foreach ($objectRooms as $object) {
+        $url = "https://se.timeedit.net/web/chalmers/db1/b1/objects/$object->id/o.json?fr=t&sid=1002";
+        $context = stream_context_create([
+            'http' => [
+                'header' => ["Cookie: $token", "User-Agent: chalmers.io"],
+                'method'  => 'GET'
+            ]
+        ]);
+        $result = file_get_contents($url, false, $context);
+        $roomObject = json_decode($result);
+        $rooms[$object->id] = [
+            "id" => $object->id,
+            "short" => $roomObject->ID,
+            "sign" => $roomObject->Lokalsignatur,
+            "name" => $roomObject->Lokalnamn,
+            "building" => $roomObject->Byggnad,
+            "type" => $roomObject->Lokaltyp,
+            "equipment" => $roomObject->Utrustning
+        ];
+    }
+
+    return $rooms;
+}
+
+function fetchAvailable() {
+    $token = getToken();
+    $url = $_GET['url'];
+    $context = stream_context_create([
+        'http' => [
+            'header' => ["Cookie: $token", "User-Agent: chalmers.io"],
+            'method'  => 'GET'
+        ]
+    ]);
+    $result = file_get_contents($url, false, $context);
+    return $result;
 }
 
 function updateRooms()
@@ -216,6 +266,12 @@ switch (isset($_GET['action']) ? $_GET['action'] : 'none') {
     case 'updateRooms':
         updateRooms();
         $res = 'Rooms updated';
+        break;
+    case 'fetchRooms':
+        $res = fetchAllRooms();
+        break;
+    case 'fetchAvailable':
+        $res = fetchAvailable();
         break;
     case 'login':
         $res = getToken();
