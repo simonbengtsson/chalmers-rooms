@@ -81,6 +81,7 @@ app.service('teBookings', ['$http', '$q', 'ModelService', function ($http, $q, m
         var deferred = $q.defer();
 
         $http.get('/server.php?action=login&user=' + user + '&password=' + pass).then(function (res) {
+            console.log("Logged in: " + res.data);
             model.userToken = res.data;
             deferred.resolve('Success');
         }, function (res, error) {

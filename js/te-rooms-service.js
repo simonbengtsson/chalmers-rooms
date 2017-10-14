@@ -2,14 +2,6 @@ var app = angular.module('cgr');
 
 app.service('teRooms', ['$http', '$q', 'ModelService', function ($http, $q, model) {
 
-    var MAX_BOOKING_COUNT = 4;
-    var BASE_URL = 'https://se.timeedit.net/web/chalmers/db1/b1';
-    var AJAX_BRIDGE_URL = "https://ajax-bridge.appspot.com";
-
-    var self = this;
-    var roomsUpdated = localStorage.getItem('roomsUpdated');
-    var allRooms = localStorage.getItem('allRooms') ? JSON.parse(localStorage.getItem('rooms')) : '';
-
     /**
      * Get complete info for all rooms
      *
@@ -115,7 +107,7 @@ app.service('teRooms', ['$http', '$q', 'ModelService', function ($http, $q, mode
     var parseJsonRooms = function (json) {
         var raw = JSON.parse(json);
         var roomIds = [];
-        if (typeof raw == 'object' && raw !== null) {
+        if (raw && raw.objects) {
             raw.objects.forEach(function (obj) {
                 roomIds.push(obj.id);
             });

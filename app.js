@@ -28,8 +28,10 @@ app.config(['$routeProvider', function ($routeProvider) {
             controller: ['$scope', 'ModelService', 'teBookings', '$location', function ($scope, model, teBookings, $location) {
                 $scope.loginError = '';
                 $scope.login = function() {
+                    console.log('Starting login')
                     if($scope.user && $scope.password) {
                         teBookings.refreshUserToken($scope.user, $scope.password).then(function() {
+                            console.log('Token updated')
                             localStorage.setItem('user', $scope.user);
                             localStorage.setItem('password', $scope.password);
                             $scope.user = '';
