@@ -47,6 +47,8 @@ app.service('teRooms', ['$http', '$q', 'ModelService', function ($http, $q, mode
         $q.all(promises).then(function (res) {
             var rooms = {};
 
+            console.log('Available fetched')
+
             res.forEach(function (ids, index) {
                 ids.forEach(function (id) {
                     if (allRooms[id]) {
